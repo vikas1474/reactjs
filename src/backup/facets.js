@@ -31,7 +31,7 @@ class Facet extends Component {
         <ul>
           {
              productCategory.map((product)=>{
-                return <li  key={product.id}><input onClick={this.props.filterData.bind(this,product.category)} type="checkbox"/>{product.category}</li>
+                return <li  key={product.id}><input onClick={this.props.filterData} type="checkbox"/>{product.category}</li>
            })
           }
         </ul>
@@ -40,15 +40,13 @@ class Facet extends Component {
   }
 }
 
-const mapStateToProps = (state) =>{
-  return{
-     filterCategory:state.rB.filter
-  }
-}
+const mapStateToProps = (state) =>({
+  data:state.name
+})
 
 const mapDispatchToProps = (dispatch) =>{
 return{
-  filterData: (category) => dispatch({type:'FACET', category:category})
+  filterData: () => dispatch({type:'FACET'})
 }
 }
 

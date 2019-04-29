@@ -1,65 +1,49 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 import './App.css';
 
-import Facet from './facets';
 import ProductList from './product_list';
+import Facet from './facets';
+import AddProject from './container/addForm';
+import ViewProject from './container/viewForm';
+import UpdateProject from './container/updateForm';
+
+
 
 import {connect} from 'react-redux';
-import * as actionCreators from './actions/action';
+import {loadData} from './actions/action';
+
 
 class App extends Component {
 
-  constructor(){
-    super();
-  }
+    componentDidMount(){
+      this.props.loadData();
+    }
 
-  // getData(){
-  //   fetch('https://ecommerce-3ad3f.firebaseio.com/productdetails.json').then((res)=>{
-  //     return res.json();
-  //   }).then((data)=>{   
-  //     let productData=[];
-  //     for(var i in data) {
-  //       data[i]["id"]=i;
-  //       productData.push(data[i])  
-  //     }
-  //     this.setState({
-  //        data:productData 
-  //     })
-  //   })
-  // }
 
-  // componentWillMount(){
-  //     this.getData();
-  // }
-
-  // filterProductonCategory = (category,bool)=>{
-  //     let filter=[...this.state.filter];
-  //     let remove;
-  //     if(bool == true){
-  //       filter.push(category);
-  //     }
-  //     else{
-  //       let index=filter.indexOf(category);
-  //       remove=filter.splice(index,1);
-  //       console.log(filter);        
-  //     }
-  //     this.setState({
-  //       filter:filter
-  //     })
-  // }
 
   render() {
+
+    console.log(this.props);
+
+//    const products=this.props.loadData();
     return (
       <div className="container">
-        <div className="row">
+                    <Router>
+                       <Route path='/' exact component={AddProject}/>
+                       <Route path="/products" exact component={ProductList}/>
+                       <Route path='/view' exact component={ViewProject}/>
+                       <Route path='/update/:id' exact component={UpdateProject}/>
+                       {/* <Route path='/dashboard' component={ProductList}/> */}
+                    </Router>  
+        {/* <div className="row">
           <div className="left-panel col-md-2">
-            // <Facet product={this.state.data} filterProductonCategory={this.filterProductonCategory}/>
+              <Facet product={this.props.products}/>     
           </div>
           <div className="right-panel col-md-9">
-            <ProductList product={this.props.data}/>            
+              <ProductList product={this.props.products}/>            
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -67,9 +51,14 @@ class App extends Component {
 
 
 const mapStateToProps = (state) =>{
+  return {
+    products:state.rA.products,
+}}
+
+const mapDispatchToProps = (dispatch) =>{
   return{
-    data:state.data
+    loadData: () => dispatch(loadData())
   }
 }
 
-export default connect(mapStateToProps,actionCreators)(App);
+export default connect(mapStateToProps,mapDispatchToProps)(App);
